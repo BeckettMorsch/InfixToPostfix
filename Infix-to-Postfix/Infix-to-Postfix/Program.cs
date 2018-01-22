@@ -12,7 +12,9 @@ namespace Infix_to_Postfix
         static void Main(string[] args)
         {
             Console.WriteLine("Enter in an expression: ");
-            String xp = Console.ReadLine();
+            String xp = "A*B–(C+D)+E";//Console.ReadLine().Replace(" ", "");
+
+            String post = "";
 
             String[] letters = new String[xp.Length];
             for(int i=0;i<letters.Length;i++)
@@ -22,9 +24,45 @@ namespace Infix_to_Postfix
 
             Stack st = new Stack();
 
+            foreach (String t in letters)
+            {
+                if (!"*+-/()".Contains(t))
+                    post = post + t;
 
+                else if (t == "(")
+                {
+                    while (t != ")")
+                        st.Pop();
+                }
 
+                else
+                {
+                    bool x = true;
+                    object oper = st.Peek();
+                    if (t == "*" && oper == "+") x = false;
+                    else if (t == "*" && oper == "-") x = false;
+                    else if (t == "/" && oper == "+") x = false;
+                    else if (t == "/" && oper == "-") x = false;
 
+                    while ( x == false || t=="(" || st.Count == 0)
+                    {
+                        st.Pop();
+                        post = post + t;
+                    }
+                    st.Push(t);
+
+                }
+
+            }
+
+           
+            foreach (String t in st)
+            {
+                st.Pop();
+                post = post + t;
+            }
+
+            Console.WriteLine(post);
 
 
 
