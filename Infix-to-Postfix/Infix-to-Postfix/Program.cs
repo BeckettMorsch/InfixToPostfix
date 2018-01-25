@@ -28,27 +28,44 @@ namespace Infix_to_Postfix
             {
                 if (!"*+-/()".Contains(t))
                     post = post + t;
-
-                else if (t == "(")
+                
+                else if (t == ")")
                 {
-                    while (t != ")")
-                        st.Pop();
+                    while (true)
+                    {
+                        if (t != "(" && st.Count != 0)
+                        {
+                            st.Pop();
+                            post = post + t;
+                        }
+                        else break;
+                    }
                 }
 
                 else
                 {
-                    bool x = true;
-                    object oper = st.Peek();
-                    if (t == "*" && oper == "+") x = false;
-                    else if (t == "*" && oper == "-") x = false;
-                    else if (t == "/" && oper == "+") x = false;
-                    else if (t == "/" && oper == "-") x = false;
-
-                    while ( x == false || t=="(" || st.Count == 0)
+                    bool pre = false;
+                    if(t =="*" || t == "/")
                     {
+                        pre = true;
+                    }
+
+                    while (/*/pre == false ||  t=="(" || st.Count != 0/*/ true)
+                    {
+                        
+
+                        if (pre == false) break;
+
+                        if (t == "(") break;
+
+                        if (st.Count == 0) break;
+
                         st.Pop();
                         post = post + t;
+
+
                     }
+
                     st.Push(t);
 
                 }
@@ -56,10 +73,11 @@ namespace Infix_to_Postfix
             }
 
            
-            foreach (String t in st)
+            for(int i=0;i<st.Count;i++)
             {
+                
+                post = post + st.Peek();
                 st.Pop();
-                post = post + t;
             }
 
             Console.WriteLine(post);
