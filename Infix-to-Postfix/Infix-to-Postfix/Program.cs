@@ -21,8 +21,8 @@ namespace Infix_to_Postfix
             {
                 letters[i] = xp.Substring(i, 1);
             }
-
-            Stack st = new Stack();
+            String ops = "+-*/()";
+            Stack<char> st = new Stack<char>();
 
             foreach (String t in letters)
             {
@@ -33,10 +33,16 @@ namespace Infix_to_Postfix
                 {
                     while (true)
                     {
-                        if (t != "(" && st.Count != 0)
+                        if (st.Count != 0)
                         {
-                            st.Pop();
-                            post = post + t;
+                            if (st.Peek() == '(')
+                            {
+
+                                st.Pop();
+                                break;
+                            }
+                            else
+                                post = post + st.Pop();
                         }
                         else break;
                     }
@@ -50,23 +56,22 @@ namespace Infix_to_Postfix
                         pre = true;
                     }
 
-                    while (/*/pre == false ||  t=="(" || st.Count != 0/*/ true)
+                    while (true)
                     {
                         
+                        if (st.Count == 0 || st.Peek() == '(') break;
 
-                        if (pre == false) break;
+                        if (ops.IndexOf(st.Peek()) < ops.IndexOf(t))
+                            break;
 
-                        if (t == "(") break;
-
-                        if (st.Count == 0) break;
-
+                        post = post + st.Peek();
                         st.Pop();
-                        post = post + t;
 
 
                     }
 
-                    st.Push(t);
+                    char[] myChar = t.ToCharArray();
+                    st.Push(myChar[0]);
 
                 }
 
@@ -79,6 +84,9 @@ namespace Infix_to_Postfix
                 post = post + st.Peek();
                 st.Pop();
             }
+
+            post = post.Replace("(", "");
+            post = post.Replace(")", "");
 
             Console.WriteLine(post);
 
